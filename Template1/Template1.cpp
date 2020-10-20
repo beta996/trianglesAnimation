@@ -15,13 +15,13 @@
 
 
 
-void DrawTriangle(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha) {
-	glBegin(GL_POLYGON);// OpenGL�a state
-	glColor4f(red, green, blue, alpha);//blue
+void drawTriangle(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha) {
+	glBegin(GL_POLYGON);
+	glColor4f(red, green, blue, alpha);
 	glVertex2f(0.0f, 100.0f);
-	glColor4f(red, green, blue, alpha);//blue
+	glColor4f(red, green, blue, alpha);
 	glVertex2f(0.0f, 0.0f);
-	glColor4f(red, green, blue, alpha);//blue
+	glColor4f(red, green, blue, alpha);
 	glVertex2f(100.0f, 0.0f);
 	glEnd();
 
@@ -30,23 +30,19 @@ void DrawTriangle(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha) {
 
 void drawQuarter(void) {
 	glTranslated(0, 0, 0);
-	DrawTriangle(0.0f, 0.0f, 1.0f, 1.0f);
+	drawTriangle(0.0f, 0.0f, 1.0f, 1.0f);
 	glTranslated(0, 100, 0);
-	DrawTriangle(0.0f, 1.0f, 0.0f, 1.0f);
+	drawTriangle(0.0f, 1.0f, 0.0f, 1.0f);
 	glTranslated(0, 100, 0);
-	DrawTriangle(1.0f, 0.0f, 0.0f, 1.0f);
+	drawTriangle(1.0f, 0.0f, 0.0f, 1.0f);
 	glTranslated(100, -100, 0);
-	DrawTriangle(1.0f, 1.0f, 0.0f, 1.0f);
+	drawTriangle(1.0f, 1.0f, 0.0f, 1.0f);
 	glTranslated(0, -100, 0);
-	DrawTriangle(1.0f, 0.5f, 0.0f, 1.0f);
+	drawTriangle(1.0f, 0.5f, 0.0f, 1.0f);
 	glTranslated(100, 0, 0);
-	DrawTriangle(1.0f, 0.0f, 1.0f, 1.0f);
-
-
+	drawTriangle(1.0f, 0.0f, 1.0f, 1.0f);
 
 }
-
-
 
 
 void MyDisplay(void) {
@@ -55,7 +51,6 @@ void MyDisplay(void) {
 	glClear(GL_COLOR_BUFFER_BIT);
 	glShadeModel(GL_SMOOTH);
 	glTranslated(0, 0, 0);
-	//--------------blue triangle----------//
 	
 	for (int i = 0; i < 4; i++) {
 
@@ -65,7 +60,6 @@ void MyDisplay(void) {
 		glPopMatrix();
 		glLoadIdentity();
 		glPushMatrix();
-
 	}
 
 	// The end of scene
@@ -84,12 +78,12 @@ void MyInit(void) {
 	glLoadIdentity();//=1
 }
 
-int main(int argc, char** argv) { //<- for normal API
+int main(int argc, char** argv) {
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);//single buffer and RGBA
 	glutInitWindowSize(600, 600);//initial window size
 	glutInitWindowPosition(100, 100);
-	glutCreateWindow("animating triangles");//create widnow, hello title bar
+	glutCreateWindow("animating triangles");
 	MyInit();
 	glutDisplayFunc(MyDisplay);
 
