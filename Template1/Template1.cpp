@@ -6,148 +6,149 @@
 #include "include\GL\GL.H"
 #include "include\GL\GLU.H"
 #include "include\GL\glut.h"
+#define LENGTH_OF_TRIANGLE 90.0f
+#define STEP 2
 
-//clors//
-//glColor4f(1.0f, 0.0f, 0.0f, 1.0f);//Red;
-//glColor4f(0.0f, 1.0f, 0.0f, 1.0f);//Green
-//glColor4f(0.0f, 0.0f, 1.0f, 1.0f);//Blue;
-//glColor4f(1.0f, 0.5f, 0.0f, 1.0f);//Orange
-//glColor4f(1.0f, 0.0f, 1.0f, 1.0f);//Magenta
-//glColor4f(1.0f, 1.0f, 0.0f, 1.0f);//Yellow
+
+double spread = 10;
+double spreadStep = 2;
+const double limit = 30.00;
 double angle = 0;
-double transition = 0;
+
+void CenterOfMassRotation() {
+	glTranslated(LENGTH_OF_TRIANGLE / 3, LENGTH_OF_TRIANGLE / 3, 0);
+	glRotated(angle, 0, 0, 1);
+	glTranslated(-LENGTH_OF_TRIANGLE / 3, -LENGTH_OF_TRIANGLE / 3, 0);
+}
+
+
 void DrawTriangle(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha) {
-	glBegin(GL_POLYGON);// OpenGLa state
-	glColor4f(red, green, blue, alpha);//blue
+	glBegin(GL_POLYGON);
+	glColor4f(red, green, blue, alpha);
 	glVertex2f(0.0f, 100.0f);
-	glColor4f(red, green, blue, alpha);//blue
+	glColor4f(red, green, blue, alpha);
 	glVertex2f(0.0f, 0.0f);
-	glColor4f(red, green, blue, alpha);//blue
+	glColor4f(red, green, blue, alpha);
 	glVertex2f(100.0f, 0.0f);
 	glEnd();
 
 }
-void innerRing(void) {
+
+void spreadingOut(float x, float y) {
+	//glTranslated(spread * x, spread * y, 0);
+}
+
+void drawPatternQuarter(void) {
+
+	//blue
 	glPushMatrix();
-	glRotated(angle, 0, 0, 1);
+	glTranslated(0, 0, 0);
+	CenterOfMassRotation();
+	spreadingOut(1.0, 1.0);
 	DrawTriangle(0.0f, 0.0f, 1.0f, 1.0f);
 	glPopMatrix();
+	glTranslated(0, 100, 0);
 
-}
-
-void middleRing(void) {
+	//green
 	glPushMatrix();
-	glRotated(-angle, 0, 0, 1);
-	glTranslated(100, 0, 0);
+	CenterOfMassRotation();
+	spreadingOut(1.0, 4.0);
 	DrawTriangle(0.0f, 1.0f, 0.0f, 1.0f);
-	glTranslated(-100, 100, 0);
+	glPopMatrix();
+	glTranslated(0, 100, 0);
+
+	//red
+	glPushMatrix();
+	CenterOfMassRotation();
+	spreadingOut(1.0, 7.0);
 	DrawTriangle(1.0f, 0.0f, 0.0f, 1.0f);
 	glPopMatrix();
-}
-
-void outerRing(void) {
-	glPushMatrix();
-	glRotated(angle, 0, 0, 1);
-	glTranslated(200, 0, 0);
-	DrawTriangle(1.0f, 0.5f, 0.0f, 1.0f);
-	glTranslated(-100, 100, 0);
-	DrawTriangle(1.0f, 0.0f, 1.0f, 1.0f);
-	glTranslated(-100, 100, 0);
-	DrawTriangle(1.0f, 1.0f, 0.0f, 1.0f);
-	glPopMatrix();
-}
-
-
-
-void DrawQuarter(void) {
-	/*glTranslated(0, 0, 0);
-	DrawTriangle(0.0f, 0.0f, 1.0f, 1.0f);
-	glTranslated(0, 100, 0);
-	DrawTriangle(0.0f, 1.0f, 0.0f, 1.0f);
-	glTranslated(0, 100, 0);
-	DrawTriangle(1.0f, 0.0f, 0.0f, 1.0f);
 	glTranslated(100, -100, 0);
+
+	//yellow
+	glPushMatrix();
+	CenterOfMassRotation();
+	spreadingOut(4.0, 4.0);
 	DrawTriangle(1.0f, 1.0f, 0.0f, 1.0f);
+	glPopMatrix();
 	glTranslated(0, -100, 0);
+	//orange
+	glPushMatrix();
+	CenterOfMassRotation();
+	spreadingOut(4.0, 1.0);
 	DrawTriangle(1.0f, 0.5f, 0.0f, 1.0f);
+	glPopMatrix();
+
 	glTranslated(100, 0, 0);
+	glPushMatrix();
+	CenterOfMassRotation();
+	spreadingOut(7.0, 1.0);
 	DrawTriangle(1.0f, 0.0f, 1.0f, 1.0f);
-	*/
-
-	innerRing();
-	middleRing();
-	outerRing();
-
+	glPopMatrix();
+	
 }
+
 
 void Timer(int) {
-	angle += 10;
-	transition += 10;
+	angle += 6;
+	if (spread >= limit || spread <= 0)
+	{
+		spreadStep *= -1;
+	}
+	spread += spreadStep;
 	glutPostRedisplay();
-	//glutTimerFunc(1000, timer, 0);
-}
-
-void QuarterMovment(void) {
-	glRotated(angle, 0, 0, 1);
-	DrawQuarter();
 }
 
 
-
+void patternRotation(void) {
+	//hglRotated(angle, 0, 0, 1);
+	drawPatternQuarter();
+}
 
 
 void MyDisplay(void) {
-	// The new scene
+	
 	glLoadIdentity();
 	glClear(GL_COLOR_BUFFER_BIT);
 	glShadeModel(GL_SMOOTH);
 	glTranslated(0, 0, 0);
 
-	
-	
 	for (int i = 0; i < 4; i++) {
-		glRotated(90, 0, 0, 1);
-		glPushMatrix();
-		//glRotated(i * 90, 0, 0, 100);
-		
-		//glPopMatrix();
-		DrawQuarter();
-		//glLoadIdentity();
-		//glPushMatrix();
+
+		glRotated(i * 90, 0, 0, 100);
+		patternRotation();
+		glLoadIdentity();
+
 	}
 
-
-
-
-		// The end of scene
-	glFlush();//start processing buffered OpenGL routines
-	glutTimerFunc(500, Timer, 0);
+	glFlush();
+	glutTimerFunc(80, Timer, 0);
 }
 
 
 void MyInit(void) {
-	glClearColor(0.0, 0.0, 0.0, 0.0);//select clearing (background) color
-									 /* initialize viewing values */
-	glViewport(0, 0, 400, 400);//window origin and size
-	glMatrixMode(GL_PROJECTION);//
-	glLoadIdentity();//=1
+	glClearColor(0.0, 0.0, 0.0, 0.0);
+									 
+	glViewport(0, 0, 400, 400);
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
 	gluOrtho2D(-500.0, 500.0, -500.0, 500.0);
 	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();//=1
+	glLoadIdentity();
 }
 
 
 
 
-int main(int argc, char** argv) { //<- for normal API
+int main(int argc, char** argv) {
 	glutInit(&argc, argv);
-	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);//single buffer and RGBA
-	glutInitWindowSize(600, 600);//initial window size
+	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
+	glutInitWindowSize(600, 600);
 	glutInitWindowPosition(100, 100);
-	glutCreateWindow("Triangles");//create widnow, hello title bar
+	glutCreateWindow("Triangle");
 	MyInit();
 	glutDisplayFunc(MyDisplay);
 
-	glutMainLoop();//enter main loop and process events
+	glutMainLoop();
 	return 0;
 }
